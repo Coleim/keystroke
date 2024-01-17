@@ -1,0 +1,60 @@
+.keycap {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    text-align: center;
+    line-height: 60px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    user-select: none;
+    display: inline-block;
+    margin: 5px;
+    transition: all 0.2s ease;
+
+    
+    background-color: #f5f5f5;
+    border: 1px solid #d1d1d1;
+    box-shadow: 0 4px #bbb;
+    color: #333;
+}
+
+.keycap.low-usage {
+    background: linear-gradient(145deg, #4caf50, #81c784);
+    box-shadow: 0 4px #4caf50;
+    border: 1px solid #81c784;
+    color: #fff;
+}
+.keycap:hover.low-usage {
+    box-shadow: 0 2px #4caf50;
+    transform: translateY(2px);
+}
+
+
+.keycap.black {
+    background-color: #333; 
+    border: 1px solid #222; 
+    box-shadow: 0 4px #000;
+    color: #fff; 
+}
+
+.keycap:hover {
+    background-color: #eaeaea;
+    box-shadow: 0 2px #bbb;
+    transform: translateY(2px);
+}
+.keycap:hover.black {
+    background-color: #444; 
+    box-shadow: 0 2px #000;
+    transform: translateY(2px);
+}
+
+.keycap:active {
+    background-color: #505050;
+    box-shadow: 0 1px #bbb;
+    transform: translateY(3px);
+}
+.keycap:active.black {
+    background-color: #555; 
+    box-shadow: 0 1px #000; 
+    transform: translateY(3px);
+}
