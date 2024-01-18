@@ -41,7 +41,7 @@
 } */
 
 
-.keycap-futuristic {
+/* .keycap-futuristic {
     width: 60px;
     height: 60px;
     border: 2px solid rgba(255, 255, 255, 0.2);
@@ -57,22 +57,22 @@
     margin: 5px;
     transition: all 0.3s ease;
     background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
-}
+} */
 
 /* Volume and Hover/Active Styles for Low to Very High Usage */
-.keycap-futuristic.low-usage {
+/* .keycap-futuristic.low-usage {
     background: linear-gradient(145deg, #4caf50, #81c784);
 }
 
 .keycap-futuristic.low-mid-usage {
     background: linear-gradient(145deg, #2196f3, #64b5f6);
-}
+} */
 
-.keycap-futuristic.mid-usage {
+/* .keycap-futuristic.mid-usage {
     background: linear-gradient(145deg, #ffeb3b, #fff176);
-}
+} */
 
-.keycap-futuristic.mid-high-usage {
+/* .keycap-futuristic.mid-high-usage {
     background: linear-gradient(145deg, #ff9800, #ffb74d);
 }
 
@@ -82,17 +82,17 @@
 
 .keycap-futuristic.very-high-usage {
     background: linear-gradient(145deg, #9c27b0, #ba68c8);
-}
+} */
 
 /* Volume and Hover/Active Animations */
-.keycap-futuristic:hover,
+/* .keycap-futuristic:hover,
 .keycap-futuristic:active {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
     transform: translateY(2px);
-}
+} */
 
 /* Black Variant */
-.keycap-futuristic.black {
+/* .keycap-futuristic.black {
     background-color: #333;
     border: 1px solid #222;
     box-shadow: 0 4px #000;
@@ -104,4 +104,4 @@
     background-color: #444;
     box-shadow: 0 4px #000;
     transform: translateY(2px);
-}
+} */

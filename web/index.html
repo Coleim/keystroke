@@ -1,25 +1,133 @@
-<script src="https://unpkg.com/htmx.org@1.9.10"></script>
-<link rel="stylesheet" type="text/css" href="/static/keycap.css">
-<link rel="stylesheet" type="text/css" href="/static/keycap-futuritic.css">
-<!-- have a button POST a click via AJAX -->
-<button hx-post="/clicked" hx-swap="outerHTML">
-Click Me
-</button>
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- <script src="https://unpkg.com/htmx.org@1.9.10"></script> -->
+        <link rel="stylesheet" type="text/css" href="/static/main.css">
+        <link rel="stylesheet" type="text/css" href="/static/keycap.css">
+        <!-- <link rel="stylesheet" type="text/css" href="/static/keycap-futuritic.css"> -->
+        <title>Keystroke usage</title>
+    </head>
+    <body>
+        <div>
+            <input type="file" id="keystrokeinput" accept="application/json,.json" />
+        </div>
 
-<div class="keycap low-usage">A</div>
-<div class="keycap-futuristic low-usage">A</div>
-<div class="keycap low-mid-usage">A</div>
-<div class="keycap mid-usage">A</div>
-<div class="keycap mid-high-usage">A</div>
-<div class="keycap high-usage">A</div>
-<div class="keycap very-high-usage">A</div>
-<div class="keycap black">A</div>
+        <h1>Heatmap</h1>
+        <div id="display-area"></div>
+
+        <h1>Missing keys</h1>
+        <div id="missing-keys-area"></div>
+        
+        <h1>Legend</h1> 
+       <div>
+        <div class="keycap">Not used</div>
+        <div class="keycap low-usage">Low</div>
+        <div class="keycap low-usage">backspace</div>
+        
+        <div class="keycap low-mid-usage">LowMid</div>
+        <div class="keycap mid-usage">Mid</div>
+        <div class="keycap mid-high-usage">Mid High</div>
+        <div class="keycap high-usage">High</div>
+        <div class="keycap very-high-usage">Very High</div>
+       </div> 
+        
+    </body>
+    <script>
+        function add_data(key, val, newData) {
+            if(newData.has(key)) {
+                oldVal = Number(newData.get(key))
+                newData.set(key, Number(oldVal + val))
+            } else {
+                newData.set(key, val)
+            }
+        }
+        function extractModifier(frequencyMap) {
+            let newMap = new Map();
+            console.log(">>> extractModifier: " , frequencyMap)
+            frequencyMap.forEach( (value,key) => {
+                console.log("key: ", key, " value: " , value)
+                if( key.includes('+') && key.length > 1) {
+                    const parts = key.split('+') //TODO Check if key == +
+                    parts.forEach( p => {
+                        add_data(p, value, newMap)
+                    })
+                } else {
+                    add_data(key, value, newMap)
+                }
+            })
+            return newMap;
+        }
+        const keyboard_layout = [
+            ['Esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'],
+            ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '='],
+            ['Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']'],
+            ['CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\'],
+            ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/'],
+            ['Ctrl', 'Fn', 'Super', 'Alt', 'Space', 'Alt', 'Super', 'Menu', 'Ctrl']
+        ]
+        const keystrokeinput = document.getElementById("keystrokeinput");
+        keystrokeinput.addEventListener("change", () => {
+            const inputFile = keystrokeinput.files[0];
+            var reader = new FileReader();
+            reader.readAsText(inputFile, "UTF-8");
+            reader.onload = function (evt) {
+                const objects = JSON.parse(evt.target.result);
+                const frequencyMap = new Map(Object.entries(objects));
+                const newFrequencyMap = extractModifier(frequencyMap);
+                const max = Math.max(...newFrequencyMap.values());
+                const interval = Math.floor(Number(max / 6));
+                //TODO: Create static layout with all key
+                //TODO: create a stats of frequency depending on the usage and the occurences.
+                //TODO: Put Caps and not caps together
+                //TODO: Create a second row for the Caps and "second" key(like : ;)
+                //TODO: Map maj to Shift ; ctrl to Ctrl etc ...
+                // 
+                var displayArea = document.getElementById('display-area');
+                displayArea.innerHTML = ''; // Clear the display area
+                keyboard_layout.forEach( row => {
+                    var rowDiv = document.createElement('div');
+                    row.forEach( key => {
+                        var div = document.createElement('div');
+                        div.className = "keycap";
+                        div.textContent = key;
+                        let searchKey = key.toLocaleLowerCase() 
+                        if( newFrequencyMap.has(searchKey) ) {
+                            const keyFreq = newFrequencyMap.get(searchKey);
+                            switch( Math.floor(keyFreq/interval) ) {
+                                case 1: div.className += " low-usage"; break;
+                                case 2: div.className += " low-mid-usage"; break;
+                                case 3: div.className += " mid-usage"; break;
+                                case 4: div.className += " mid-high-usage"; break;
+                                case 5: div.className += " high-usage"; break;
+                                case 6: div.className += " very-high-usage"; break;
+                            }
+                            newFrequencyMap.delete(searchKey) 
+                        }
+                        rowDiv.appendChild(div);
+                    })
+                    displayArea.appendChild(rowDiv);
+                })
+                newFrequencyMap.forEach( (value, key) => {
+                    var div = document.createElement('div');
+                    div.className = "keycap";
+                    div.textContent = key;
+                    switch( Math.floor(value/interval) ) {
+                        case 1: div.className += " low-usage"; break;
+                        case 2: div.className += " low-mid-usage"; break;
+                        case 3: div.className += " mid-usage"; break;
+                        case 4: div.className += " mid-high-usage"; break;
+                        case 5: div.className += " high-usage"; break;
+                        case 6: div.className += " very-high-usage"; break;
+                    }
+                    document.getElementById('missing-keys-area').appendChild(div);
+                });
+            }
+        })
+
+    </script>
+
+</html>
+    
+    
 
 
-
-<div class="keycap-futuristic low-mid-usage">A</div>
-<div class="keycap-futuristic mid-usage">A</div>
-<div class="keycap-futuristic mid-high-usage">A</div>
-<div class="keycap-futuristic high-usage">A</div>
-<div class="keycap-futuristic very-high-usage">A</div>
-<div class="keycap-futuristic black">A</div>
