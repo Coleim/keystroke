@@ -14,6 +14,8 @@
     border: 2px solid #f7f7f7;
     box-shadow: 0 5px #bbb;
     color: #333;
+    font-weight: bold;
+    text-transform: capitalize;
 }
 
 .keycap:hover {
@@ -26,102 +28,135 @@
     transform: translateY(3px);
 }
 
-.keycap.low-usage {
-    background: linear-gradient(145deg, #4caf50, #81c784);
-    box-shadow: 0 5px #4caf50;
-    border: 2px solid #a3e3a6;
-    color: #fff;
+
+
+
+.keycap.usage-0 {
+    background: linear-gradient(145deg, #66c2a5, #76c3aa);
+    box-shadow: 0 5px #66c2a5;
+    border: 2px solid #96d6c3;
+    /* color: #fff; */
 }
-.keycap:hover.low-usage {
-    box-shadow: 0 3px #4caf50;
+.keycap:hover.usage-0 {
+    box-shadow: 0 3px #66c2a5;
     transform: translateY(2px);
 }
-.keycap:active.low-usage {
-    box-shadow: 0 1px #173418; 
-    border: 2px solid #173418;
+.keycap:active.usage-0 {
+    box-shadow: 0 1px #2a453c; 
+    border: 2px solid #2a453c;
     transform: translateY(3px);
 }
 
-.keycap.low-mid-usage {
-    background: linear-gradient(145deg, #2196f3, #64b5f6);
-    box-shadow: 0 5px #2196f3;
-    border: 2px solid #88caff;
-    color: #fff;
+.keycap.usage-1 {
+    background: linear-gradient(145deg, #abdda4, #b3ddb0);
+    box-shadow: 0 5px #abdda4;
+    border: 2px solid #caf3db;
+    /* color: #fff; */
 }
-.keycap:hover.low-mid-usage {
-    box-shadow: 0 3px #2196f3;
+.keycap:hover.usage-1 {
+    box-shadow: 0 3px #abdda4;
     transform: translateY(2px);
 }
-.keycap:active.low-mid-usage {
-    box-shadow: 0 1px #104977; 
-    border: 2px solid #104977;
+.keycap:active.usage-1 {
+    box-shadow: 0 1px #3d4f42; 
+    border: 2px solid #3d4f42;
+    transform: translateY(3px);
+}
+
+.keycap.usage-2 {
+    background: linear-gradient(145deg, #e6f598, #eaf6af);
+    box-shadow: 0 5px #e6f598;
+    border: 2px solid #f7ffd1;
+    /* color: #fff; */
+}
+.keycap:hover.usage-2 {
+    box-shadow: 0 3px #e6f598;
+    transform: translateY(2px);
+}
+.keycap:active.usage-2 {
+    box-shadow: 0 1px #6b7247; 
+    border: 2px solid #6b7247;
+    transform: translateY(3px);
+}
+
+.keycap.usage-3 {
+    background: linear-gradient(145deg, #fee08b, #ffeaaf);
+    box-shadow: 0 5px #fee08b;
+    border: 2px solid #fff2d0;
+    /* color: #fff; */
+}
+.keycap:hover.usage-3 {
+    box-shadow: 0 3px #fee08b;
+    transform: translateY(2px);
+}
+.keycap:active.usage-3 {
+    box-shadow: 0 1px #766741; 
+    border: 2px solid #766741;
+    transform: translateY(3px);
+}
+
+.keycap.usage-4 {
+    background: linear-gradient(145deg, #fdae61, #ffbd7c);
+    box-shadow: 0 5px #fdae61;
+    border: 2px solid #ffe1c3;
+    /* color: #fff; */
+}
+.keycap:hover.usage-4 {
+    box-shadow: 0 3px #fdae61;
+    transform: translateY(2px);
+}
+.keycap:active.usage-4 {
+    box-shadow: 0 1px #6a4929; 
+    border: 2px solid #6a4929;
     transform: translateY(3px);
 }
 
 
-.keycap.mid-usage {
-    background: linear-gradient(145deg, #ffe60a, #fbe949);
-    box-shadow: 0 5px #ffe60a;
-    border: 2px solid #fff9c7;
-    color: #fff;
+.keycap.usage-5 {
+    background: linear-gradient(145deg, #f46d43, #f78562);
+    box-shadow: 0 5px #f46d43;
+    border: 2px solid #ffb59f;
+    /* color: #fff; */
 }
-.keycap:hover.mid-usage {
-    box-shadow: 0 3px #ffe60a;
+.keycap:hover.usage-5 {
+    box-shadow: 0 3px #f46d43;
     transform: translateY(2px);
 }
-.keycap:active.mid-usage {
-    box-shadow: 0 1px #6c641a; 
-    border: 2px solid #6c641a;
+.keycap:active.usage-5 {
+    box-shadow: 0 1px #5f2a1a; 
+    border: 2px solid #5f2a1a;
+    transform: translateY(3px);
+}
+
+.keycap.usage-6 {
+    background: linear-gradient(145deg, #d53e4f, #d35664);
+    box-shadow: 0 5px #d53e4f;
+    border: 2px solid #ffb1bb;
+    /* color: #fff; */
+}
+.keycap:hover.usage-6 {
+    box-shadow: 0 3px #d53e4f;
+    transform: translateY(2px);
+}
+.keycap:active.usage-6 {
+    box-shadow: 0 1px #6e212b; 
+    border: 2px solid #6e212b;
     transform: translateY(3px);
 }
 
 
-.keycap.mid-high-usage {
-    background: linear-gradient(145deg, #ff9800, #ffb74d);
-    box-shadow: 0 5px #ff9800;
-    border: 2px solid #ffce85;
+.keycap.usage-7 {
+    background: linear-gradient(145deg, #9e0142, #9f1b52);
+    box-shadow: 0 5px #9e0142;
+    border: 2px solid #ff93c0;
     color: #fff;
 }
-.keycap:hover.mid-high-usage {
-    box-shadow: 0 3px #ff9800;
+.keycap:hover.usage-7 {
+    box-shadow: 0 3px #9e0142;
     transform: translateY(2px);
 }
-.keycap:active.mid-high-usage {
-    box-shadow: 0 1px #985b00; 
-    border: 2px solid #985b00;
-    transform: translateY(3px);
-}
-
-
-.keycap.high-usage {
-    background: linear-gradient(145deg, #f44336, #e57373);
-    box-shadow: 0 5px #f44336;
-    border: 2px solid #ff9393;
-    color: #fff;
-}
-.keycap:hover.high-usage {
-    box-shadow: 0 3px #f44336;
-    transform: translateY(2px);
-}
-.keycap:active.high-usage {
-    box-shadow: 0 1px #9e2a22; 
-    border: 2px solid #9e2a22;
-    transform: translateY(3px);
-}
-
-
-.keycap.very-high-usage {
-    background: linear-gradient(145deg, #9c27b0, #ba68c8);
-    box-shadow: 0 5px #9c27b0;
-    border: 2px solid #db94e8;
-    color: #fff;
-}
-.keycap:hover.very-high-usage {
-    box-shadow: 0 3px #9c27b0;
-    transform: translateY(2px);
-}
-.keycap:active.very-high-usage {
-    box-shadow: 0 1px #631870; 
-    border: 2px solid #631870;
+.keycap:active.usage-7 {
+    box-shadow: 0 1px #4f0021; 
+    border: 2px solid #4f0021;
     transform: translateY(3px);
 }

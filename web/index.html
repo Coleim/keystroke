@@ -15,21 +15,23 @@
         <h1>Heatmap</h1>
         <div id="display-area"></div>
 
-        <h1>Missing keys</h1>
-        <div id="missing-keys-area"></div>
         
         <h1>Legend</h1> 
-       <div>
-        <div class="keycap">Not used</div>
-        <div class="keycap low-usage">Low</div>
-        <div class="keycap low-usage">backspace</div>
-        
-        <div class="keycap low-mid-usage">LowMid</div>
-        <div class="keycap mid-usage">Mid</div>
-        <div class="keycap mid-high-usage">Mid High</div>
-        <div class="keycap high-usage">High</div>
-        <div class="keycap very-high-usage">Very High</div>
+        <div>
+            <div class="keycap">Not used</div>
+            <div class="keycap usage-0">0</div>
+            <div class="keycap usage-1">1</div>
+            <div class="keycap usage-2">2</div>
+            <div class="keycap usage-3">3</div>
+            <div class="keycap usage-4">4</div>
+            <div class="keycap usage-5">5</div>
+            <div class="keycap usage-6">6</div>
+            <div class="keycap usage-7">7</div>
        </div> 
+
+       
+       <h1>Missing keys</h1>
+       <div id="missing-keys-area"></div>
         
     </body>
     <script>
@@ -43,11 +45,9 @@
         }
         function extractModifier(frequencyMap) {
             let newMap = new Map();
-            console.log(">>> extractModifier: " , frequencyMap)
             frequencyMap.forEach( (value,key) => {
-                console.log("key: ", key, " value: " , value)
                 if( key.includes('+') && key.length > 1) {
-                    const parts = key.split('+') //TODO Check if key == +
+                    const parts = key.split('+')
                     parts.forEach( p => {
                         add_data(p, value, newMap)
                     })
@@ -57,13 +57,37 @@
             })
             return newMap;
         }
+        function isLetter(c) {
+            return c.toLowerCase() != c.toUpperCase();
+        }
+        function extractCapitals(frequencyMap) {
+            frequencyMap.forEach( (value,key) => {
+                if(isLetter(key)) {
+                    const keyUpper = key.toUpperCase();
+                    if(keyUpper !== key && frequencyMap.has(keyUpper)) {
+                        let foundValue = frequencyMap.get(keyUpper)
+                        frequencyMap.delete(keyUpper) 
+                        frequencyMap.delete(key)
+                        let newValue = value + foundValue
+                        frequencyMap.set(keyUpper, newValue );
+                    }
+                }
+            })
+            return frequencyMap;
+        }
         const keyboard_layout = [
-            ['Esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'],
-            ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '='],
-            ['Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']'],
-            ['CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\'],
-            ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/'],
-            ['Ctrl', 'Fn', 'Super', 'Alt', 'Space', 'Alt', 'Super', 'Menu', 'Ctrl']
+            ['esc', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'insert', 'delete', 'origine', 'end'],
+            [null, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '°', '+', 'backspace', 'num lock'],
+            [null, null, '~', '#', '{', '[', '|', '`', '\\', '^', '@', ']', '}'],
+            ['²', '&', 'é', '\"', '\'', '(', '-', 'è', '_', 'ç', 'à', ')', '='],
+            ['tab', 'A', 'Z', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '^', '$'],
+            ['capsLock', 'Q', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', "ù", '*', 'enter'],
+            // verr.maj 
+            [null, null, null, null, null, null, null, null, null, '?', '.', '/', '§'],
+            ['shift', '>', '<', 'W', 'X', 'C', 'V', 'B', 'N', ',', ';', ':', '!'],
+            ['ctrl', 'fn', 'windows gauche', 'alt', 'space', 'alt gr', 'right ctrl', 'left', 'up', 'down', 'right', 'pg.prec', 'pg.suiv', 'decimal']
+            // Super = windows gauche
+            // rajouter la taille (1 => 5 , eg, sapce = 5)
         ]
         const keystrokeinput = document.getElementById("keystrokeinput");
         keystrokeinput.addEventListener("change", () => {
@@ -73,35 +97,77 @@
             reader.onload = function (evt) {
                 const objects = JSON.parse(evt.target.result);
                 const frequencyMap = new Map(Object.entries(objects));
-                const newFrequencyMap = extractModifier(frequencyMap);
-                const max = Math.max(...newFrequencyMap.values());
-                const interval = Math.floor(Number(max / 6));
-                //TODO: Create static layout with all key
-                //TODO: create a stats of frequency depending on the usage and the occurences.
-                //TODO: Put Caps and not caps together
-                //TODO: Create a second row for the Caps and "second" key(like : ;)
-                //TODO: Map maj to Shift ; ctrl to Ctrl etc ...
-                // 
+                let newFrequencyMap = extractModifier(frequencyMap);
+                newFrequencyMap = extractCapitals(newFrequencyMap)
+                let sum = 0;
+                let count = 0;
+                newFrequencyMap.forEach( val => {sum += val; count++} )
+                const interval = sum/count;
+                newFrequencyMap.forEach( (value, key) => {
+                    if( key === "droite") {
+                        newFrequencyMap.set('right', value);
+                        newFrequencyMap.delete(key) 
+                    }
+                    if( key === "gauche") {
+                        newFrequencyMap.set('left', value);
+                        newFrequencyMap.delete(key) 
+                    }
+                    if( key === "haut") {
+                        newFrequencyMap.set('up', value);
+                        newFrequencyMap.delete(key) 
+                    }
+                    if( key === "bas") {
+                        newFrequencyMap.set('down', value);
+                        newFrequencyMap.delete(key) 
+                    }
+                    if( key === "maj") {
+                        newFrequencyMap.set('shift', value);
+                        newFrequencyMap.delete(key) 
+                    }
+                    if( key === "suppr") {
+                        newFrequencyMap.set('delete', value);
+                        newFrequencyMap.delete(key) 
+                    }
+                    if( key === "verr.maj") {
+                        newFrequencyMap.set('capsLock', value);
+                        newFrequencyMap.delete(key) 
+                    }
+                    if( key === "ctrl droite") {
+                        newFrequencyMap.set('right ctrl', value);
+                        newFrequencyMap.delete(key) 
+                    }
+                })
                 var displayArea = document.getElementById('display-area');
                 displayArea.innerHTML = ''; // Clear the display area
                 keyboard_layout.forEach( row => {
                     var rowDiv = document.createElement('div');
                     row.forEach( key => {
+                        if(key === null) {
+                            var div = document.createElement('div');
+                            div.className = "keycap";
+                            div.textContent = "-";
+                            rowDiv.appendChild(div);
+                            return;
+                        }
                         var div = document.createElement('div');
                         div.className = "keycap";
                         div.textContent = key;
-                        let searchKey = key.toLocaleLowerCase() 
-                        if( newFrequencyMap.has(searchKey) ) {
-                            const keyFreq = newFrequencyMap.get(searchKey);
-                            switch( Math.floor(keyFreq/interval) ) {
-                                case 1: div.className += " low-usage"; break;
-                                case 2: div.className += " low-mid-usage"; break;
-                                case 3: div.className += " mid-usage"; break;
-                                case 4: div.className += " mid-high-usage"; break;
-                                case 5: div.className += " high-usage"; break;
-                                case 6: div.className += " very-high-usage"; break;
+                        if( newFrequencyMap.has(key) ) {
+
+                            const keyFreq = newFrequencyMap.get(key);
+                            // div.textContent += " : " + keyFreq;
+                            const category = Math.floor(keyFreq/interval)
+                            switch( category ) {
+                                case 0: div.className += " usage-0"; break;
+                                case 1: div.className += " usage-1"; break;
+                                case 2: div.className += " usage-2"; break;
+                                case 3: div.className += " usage-3"; break;
+                                case 4: div.className += " usage-4"; break;
+                                case 5: div.className += " usage-5"; break;
+                                case 6: div.className += " usage-6"; break;
+                                default: div.className += " usage-7";
                             }
-                            newFrequencyMap.delete(searchKey) 
+                            newFrequencyMap.delete(key) 
                         }
                         rowDiv.appendChild(div);
                     })
@@ -110,14 +176,17 @@
                 newFrequencyMap.forEach( (value, key) => {
                     var div = document.createElement('div');
                     div.className = "keycap";
-                    div.textContent = key;
+                    div.textContent = key + " : " + value;
+                    console.log("key: ", key) 
                     switch( Math.floor(value/interval) ) {
-                        case 1: div.className += " low-usage"; break;
-                        case 2: div.className += " low-mid-usage"; break;
-                        case 3: div.className += " mid-usage"; break;
-                        case 4: div.className += " mid-high-usage"; break;
-                        case 5: div.className += " high-usage"; break;
-                        case 6: div.className += " very-high-usage"; break;
+                        case 0: div.className += " usage-0"; break;
+                        case 1: div.className += " usage-1"; break;
+                        case 2: div.className += " usage-2"; break;
+                        case 3: div.className += " usage-3"; break;
+                        case 4: div.className += " usage-4"; break;
+                        case 5: div.className += " usage-5"; break;
+                        case 6: div.className += " usage-6"; break;
+                        case 7: div.className += " usage-7"; break;
                     }
                     document.getElementById('missing-keys-area').appendChild(div);
                 });
